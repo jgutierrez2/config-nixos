@@ -1,0 +1,444 @@
+* Current System Hostname
+#+NAME: myHostName
+#+BEGIN_SRC sh
+  hostname
+#+END_SRC
+
+#+RESULTS:
+: home
+
+* NixOS Configuration
+#+BEGIN_SRC nix :tangle /sudo::/etc/nixos/configuration.nix :noweb yes
+
+  # Edit this configuration file to define what should be installed on
+  # your system.  Help is available in the configuration.nix(5) man page
+  # and in the NixOS manual (accessible by running ‘nixos-help’).
+  # test comment
+  
+  { config, pkgs, ... }:
+  let hostname = "<<myHostName()>>";
+  in
+  {
+    imports =
+      [ # Include the results of the hardware scan.
+        ./hardware-configuration.nix
+        /home/jacob/nixos-configuration/${hostname}.nix
+
+  #      /home/jacob/nixos-configuration/configuration.nix
+      ];
+
+    # Bootloader.
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
+
+    networking.hostName = hostname; # Define your hostname.
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # Enable networking
+    networking.networkmanager.enable = true;
+
+    # Set your time zone.
+    time.timeZone = "America/Chicago";
+
+    # Select internationalisation properties.
+    i18n.defaultLocale = "en_US.UTF-8";
+
+    i18n.extraLocaleSettings = {
+      LC_ADDRESS = "en_US.UTF-8";
+      LC_IDENTIFICATION = "en_US.UTF-8";
+      LC_MEASUREMENT = "en_US.UTF-8";
+      LC_MONETARY = "en_US.UTF-8";
+      LC_NAME = "en_US.UTF-8";
+      LC_NUMERIC = "en_US.UTF-8";
+      LC_PAPER = "en_US.UTF-8";
+      LC_TELEPHONE = "en_US.UTF-8";
+      LC_TIME = "en_US.UTF-8";
+    };
+
+    # Configure keymap in X11
+    services.xserver.xkb = {
+      layout = "us";
+      variant = "";
+    };
+
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.users.jacob = {
+      isNormalUser = true;
+      description = "jacob gutierrez";
+      extraGroups = [ "networkmanager" "wheel" ];
+      packages = with pkgs; [];
+    };
+
+    # Allow unfree packages
+    nixpkgs.config.allowUnfree = true;
+
+
+    nixpkgs.config.packageOverrides = pkgs: {
+      dyalog = pkgs.dyalog.override {
+        acceptLicense = true;
+      };
+    };
+
+
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    environment.systemPackages = with pkgs; [
+      dyalog
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
+    ];
+
+    # Some programs need SUID wrappers, can be configured further or are
+    # started in user sessions.
+    # programs.mtr.enable = true;
+    # programs.gnupg.agent = {
+    #   enable = true;
+    #   enableSSHSupport = true;
+    # };
+
+    # List services that you want to enable:
+
+    # Enable the OpenSSH daemon.
+    services.openssh.enable = true;
+
+    # Open ports in the firewall.
+    # networking.firewall.allowedTCPPorts = [ ... ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
+    # networking.firewall.enable = false;
+
+    # This value determines the NixOS release from which the default
+    # settings for stateful data, like file locations and database versions
+    # on your system were taken. It‘s perfectly fine and recommended to leave
+    # this value at the release version of the first install of this system.
+    # Before changing this value read the documentation for this option
+    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+    system.stateVersion = "23.11"; # Did you read the comment?
+  }
+#+END_SRC
+
+* Hosts
+** Home
+#+BEGIN_SRC nix :tangle ~/nixos-configuration/home.nix
+  # Edit this configuration file to define what should be installed on
+  # your system.  Help is available in the configuration.nix(5) man page
+  # and in the NixOS manual (accessible by running ‘nixos-help’).
+  #test comment
+
+  { config, pkgs, lib, ... }:
+
+  {
+
+    imports =
+      [
+        ./shared.nix
+
+        ./containers/radarr/radarr.nix
+        ./containers/sonarr/sonarr.nix
+        ./containers/readarr/readarr.nix
+        ./containers/calibre/calibre.nix
+        ./containers/calibre-web/calibre-web.nix
+        ./containers/sabnzbd/sabnzbd.nix
+        ./containers/prowlarr/prowlarr.nix
+        ./containers/adguard/adguard.nix
+        ./containers/jellyfin/jellyfin.nix
+        ./containers/caddy/caddy.nix
+      ];
+
+    fileSystems."/external-media" = {
+      device = "/dev/disk/by-uuid/18c8aea6-4ac9-413b-9a00-22da584dc4a9";
+      fsType = "ext4";
+    };
+
+    environment.systemPackages = with pkgs; [
+      
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
+    ];
+
+
+   hardware.opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver # For Broadwell (2015) or newer processors. LIBVA_DRIVER_NAME=iHD
+  #      intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
+      ];
+    };
+    environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the env var
+    virtualisation.docker.enable = true;
+
+    services = {
+      ttyd = {
+        enable = true;
+        writeable = true;
+        port = 7681;
+        terminalType = "xterm-direct";
+  #      entrypoint = [ "bash" ];
+      };
+
+      syncthing = {
+        enable = true;
+        guiAddress = "0.0.0.0:8384";
+        user = "jacob";
+        configDir = "/home/jacob/.config/syncthing";
+      };
+
+      emacs = {
+        enable = true;
+      };
+    };
+
+    #for ttyd
+    networking.firewall.allowedTCPPorts = [ 7681
+
+                                            #syncthing
+                                            8384
+                                            22000
+                                          ];
+
+    #for syncthing
+    networking.firewall.allowedUDPPorts = [ 22000 21027 ];
+
+    environment.interactiveShellInit = ''
+      alias wn='emacsclient ~/notes/work-notes.org'
+    '';
+  }
+
+#+END_SRC
+
+** Cameras
+#+BEGIN_SRC nix :tangle ~/nixos-configuration/cameras.nix
+  # Edit this configuration file to define what should be installed on
+  # your system.  Help is available in the configuration.nix(5) man page
+  # and in the NixOS manual (accessible by running ‘nixos-help’).
+
+  { config, pkgs, lib, ... }:
+
+  {
+
+    imports =
+      [ ./shared.nix
+
+        ./containers/frigate/frigate.nix
+        ./containers/hass/hass.nix
+        ./containers/zwavejs/zwavejs.nix
+      ];
+
+    fileSystems."/external-media" = {
+      device = "/dev/disk/by-uuid/6c713be8-7eea-4420-b944-f21cb3542218";
+      fsType = "ext4";
+    };
+
+   hardware.opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver # For Broadwell (2015) or newer processors. LIBVA_DRIVER_NAME=iHD
+  #      intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
+      ];
+    };
+    environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the env var
+    virtualisation.docker.enable = true;
+
+  }
+
+  
+#+END_SRC
+** shared
+#+BEGIN_src nix :tangle ~/nixos-configuration/shared.nix
+
+  # Edit this configuration file to define what should be installed on
+  # your system.  Help is available in the configuration.nix(5) man page
+  # and in the NixOS manual (accessible by running ‘nixos-help’).
+
+  { config, pkgs, ... }:
+
+  {
+    # Allow unfree packages
+    nixpkgs.config.allowUnfree = true;
+
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    environment.systemPackages = with pkgs; [
+      git
+      gh
+
+      tree
+
+      kitty
+      emacs
+
+      hyprland
+      wofi
+
+      brave
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
+    ];
+
+  }
+
+
+#+end_src
+
+** Containers
+
+*** radarr
+#+BEGIN_SRC nix :tangle ~/nixos-configuration/containers/radarr/radarr.nix
+
+  {lib, ...}: let
+  contName = "radarr";
+  dir1 = "/etc/oci.cont/${contName}";
+in {
+  system.activationScripts."make${contName}Dir" = lib.stringAfter ["var"] ''
+    mkdir -v -p ${toString dir1} & chown 1000:1000 ${toString dir1}
+  '';
+
+  virtualisation.oci-containers.containers."${contName}" = {
+    hostname = "${contName}";
+    autoStart = true;
+    image = "ghcr.io/linuxserver/${toString contName}:latest";
+
+    volumes = [
+      "/etc/localtime:/etc/localtime:ro"
+      "${toString dir1}:/config"
+      "/external-media/data:/data"
+    ];
+
+    ports = [
+      "7878:7878"
+    ];
+              
+    environment = {
+      PUID = "1000";
+      PGID = "1000";
+    };
+
+#    extraOptions = [
+#      "--network=macvlan_lan"
+#      "--ip=192.168.87.32"
+#    ];
+  };
+}
+
+
+#+END_SRC
+*** sonarr
+#+begin_src nix :tangle /nixos-configuration/container/sonarr/sonarr.nix
+
+    {lib, ...}: let
+    contName = "sonarr";
+    dir1 = "/etc/oci.cont/${contName}";
+  in {
+    system.activationScripts."make${contName}Dir" = lib.stringAfter ["var"] ''
+      mkdir -v -p ${toString dir1} & chown 1000:1000 ${toString dir1}
+    '';
+
+    virtualisation.oci-containers.containers."${contName}" = {
+      hostname = "${contName}";
+      autoStart = true;
+      image = "ghcr.io/linuxserver/${toString contName}:latest";
+
+      volumes = [
+        "/etc/localtime:/etc/localtime:ro"
+        "${toString dir1}:/config"
+        "/external-media/data:/data"
+      ];
+
+      ports = [
+        "8989:8989"
+      ];
+              
+      environment = {
+        PUID = "1000";
+        PGID = "1000";
+      };
+
+  #    extraOptions = [
+  #      "--network=macvlan_lan"
+  #      "--ip=192.168.87.32"
+  #    ];
+    };
+  }
+
+#+end_src
+*** readarr
+#+begin_src nix :tangle ~/nixos-configuration/containers/readarr/readarr.nix
+{lib, ...}: let
+  contName = "readarr";
+  dir1 = "/etc/oci.cont/${contName}";
+in {
+  system.activationScripts."make${contName}Dir" = lib.stringAfter ["var"] ''
+    mkdir -v -p ${toString dir1} & chown 1000:1000 ${toString dir1}
+  '';
+
+  virtualisation.oci-containers.containers."${contName}" = {
+    hostname = "${contName}";
+    autoStart = true;
+    image = "ghcr.io/linuxserver/${toString contName}:develop";
+
+    volumes = [
+      "/etc/localtime:/etc/localtime:ro"
+      "${toString dir1}:/config"
+      "/external-media/data:/data"
+    ];
+
+    ports = [
+      "8787:8787"
+    ];
+              
+    environment = {
+      PUID = "1000";
+      PGID = "1000";
+    };
+
+#    extraOptions = [
+#      "--network=macvlan_lan"
+#      "--ip=192.168.87.32"
+#    ];
+  };
+}
+
+#+end_src
+*** prowlarr
+#+begin_src nix :tangle ~/nixos-configuration/containers/prowlarr/prowlarr.nix
+
+  {lib, ...}: let
+  contName = "prowlarr";
+  dir1 = "/etc/oci.cont/${contName}";
+in {
+  system.activationScripts."make${contName}Dir" = lib.stringAfter ["var"] ''
+    mkdir -v -p ${toString dir1} & chown 1000:1000 ${toString dir1}
+  '';
+
+  virtualisation.oci-containers.containers."${contName}" = {
+    hostname = "${contName}";
+    autoStart = true;
+    image = "ghcr.io/linuxserver/${toString contName}:latest";
+
+    volumes = [
+      "/etc/localtime:/etc/localtime:ro"
+      "${toString dir1}:/config"
+    ];
+
+    ports = [
+      "9696:9696"
+    ];
+              
+    environment = {
+      PUID = "1000";
+      PGID = "1000";
+    };
+
+#    extraOptions = [
+#      "--network=macvlan_lan"
+#      "--ip=192.168.87.32"
+#    ];
+  };
+}
+
+
+#+end_src
