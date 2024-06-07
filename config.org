@@ -141,7 +141,7 @@
   {
 
     imports =
-      [ ../modules/shared.nix
+      [ ../../modules/shared.nix
         ./services.nix
       ];
 
@@ -162,7 +162,7 @@
       };
 
       pipewire = {
-        enable = tue;
+        enable = true;
         pulse.enable = true;
       };
     };

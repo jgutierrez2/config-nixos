@@ -7,7 +7,7 @@
 {
 
   imports =
-    [ ../modules/shared.nix
+    [ ../../modules/shared.nix
       ./services.nix
     ];
 

@@ -8,7 +8,7 @@
     };
 
     pipewire = {
-      enable = tue;
+      enable = true;
       pulse.enable = true;
     };
   };
