@@ -33,6 +33,19 @@
      };
    environment.etc."oci.cont/${contName}/config/Caddyfile" = {
      text = ''
+
+   {
+     auto_https off
+   }
+
+   https://frigate.gooterez.me {
+     redir http://{host}{uri}
+   }
+
+   http://frigate.gooterez.me {
+     reverse_proxy 192.168.3.102:5000
+   }
+
    http://fluidd.gooterez.me {
      reverse_proxy 192.168.3.186:80
    }
@@ -61,9 +74,11 @@
      reverse_proxy 192.168.3.101:2000
    }
 
-   http://frigate.gooterez.me {
-     reverse_proxy 192.168.3.102:5000
-   }
+   #frigate.gooterez.me {
+   #  reverse_proxy 192.168.3.102:5000
+   #
+   #  tls internal
+   #}
 
    http://hass.gooterez.me {
      reverse_proxy 192.168.3.102:8123
@@ -72,6 +87,7 @@
    http://pkm.gooterez.me {
      reverse_proxy 192.168.3.101:7681
    }
+
      '';
    };
  }
