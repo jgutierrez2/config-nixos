@@ -2,6 +2,7 @@
 
 
 ** Contents                                                       :toc:quote:
+#+begin_quote
 - [[#machines][Machines]]
   - [[#biollante][biollante]]
   - [[#ghidorah][ghidorah]]
@@ -22,6 +23,7 @@
   - [[#frigate][frigate]]
   - [[#hass][hass]]
   - [[#zwavejs][zwavejs]]
+#+end_quote
 
 * Machines
 ** biollante
