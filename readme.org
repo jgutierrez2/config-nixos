@@ -1,7 +1,8 @@
 #+OPTIONS: toc:2          (only include two levels in TOC)
 
 
-** Contents                                                              :toc:
+** Contents
+#+TAGS: @toc @quote 
 - [[#machines][Machines]]
   - [[#biollante][biollante]]
   - [[#ghidorah][ghidorah]]
