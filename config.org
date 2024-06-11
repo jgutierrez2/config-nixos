@@ -1,6 +1,28 @@
 #+OPTIONS: toc:2          (only include two levels in TOC)
 
 
+** Contents                                                              :toc:
+- [[#machines][Machines]]
+  - [[#biollante][biollante]]
+  - [[#ghidorah][ghidorah]]
+  - [[#rodan][rodan]]
+- [[#modules][Modules]]
+  - [[#shared][shared]]
+- [[#containers][Containers]]
+  - [[#homepage][homepage]]
+  - [[#radarr][radarr]]
+  - [[#sonarr][sonarr]]
+  - [[#readarr][readarr]]
+  - [[#prowlarr][prowlarr]]
+  - [[#calibre][calibre]]
+  - [[#calibre-web][calibre-web]]
+  - [[#sabnzbd][sabnzbd]]
+  - [[#jellyfin][jellyfin]]
+  - [[#caddy][caddy]]
+  - [[#frigate][frigate]]
+  - [[#hass][hass]]
+  - [[#zwavejs][zwavejs]]
+
 * Machines
 ** biollante
 *** main
