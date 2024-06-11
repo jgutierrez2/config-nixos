@@ -2,8 +2,9 @@
 
 
 * Machines
-** Home
-#+BEGIN_SRC nix :tangle ~/.config/nixos/machines/home.nix
+** biollante
+*** main
+#+BEGIN_SRC nix :tangle ~/.config/nixos/machines/biollante/biollante.nix
 
   # Edit this configuration file to define what should be installed on
   # your system.  Help is available in the configuration.nix(5) man page
@@ -15,21 +16,23 @@
 
     imports =
       [
-        ../modules/shared.nix
+        ../../modules/shared.nix
+        ./services.nix
 
-        ../containers/radarr.nix
-        ../containers/sonarr.nix
-        ../containers/readarr.nix
-        ../containers/calibre.nix
-        ../containers/calibre-web.nix
-        ../containers/sabnzbd.nix
-        ../containers/prowlarr.nix
-        ../containers/jellyfin.nix
-        ../containers/caddy.nix
+        ../../containers/homepage.nix
+        ../../containers/radarr.nix
+        ../../containers/sonarr.nix
+        ../../containers/readarr.nix
+        ../../containers/calibre.nix
+        ../../containers/calibre-web.nix
+        ../../containers/sabnzbd.nix
+        ../../containers/prowlarr.nix
+        ../../containers/jellyfin.nix
+        ../../containers/caddy.nix
       ];
 
-    networking.hostName = "home"; # Define your hostname.
-    
+    networking.hostName = "biollante"; # Define your hostname.
+
     fileSystems."/external-media" = {
       device = "/dev/disk/by-uuid/18c8aea6-4ac9-413b-9a00-22da584dc4a9";
       fsType = "ext4";
@@ -52,14 +55,24 @@
     environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the env var
     virtualisation.docker.enable = true;
 
+    environment.interactiveShellInit = ''
+      alias wn='emacsclient ~/notes/work-notes.org'
+    '';
+  }
+
+#+END_SRC
+*** services
+#+begin_src nix :tangle ~/.config/nixos/machines/biollante/services.nix
+  {
+
     services = {
       ttyd = {
         enable = true;
         writeable = true;
         port = 7681;
         terminalType = "xterm-direct";
-  #      entrypoint = [ "bash" ];
-      };
+    #      entrypoint = [ "bash" ];
+        };
 
       syncthing = {
         enable = true;
@@ -84,12 +97,8 @@
     #for syncthing
     networking.firewall.allowedUDPPorts = [ 22000 21027 ];
 
-    environment.interactiveShellInit = ''
-      alias wn='emacsclient ~/notes/work-notes.org'
-    '';
   }
-
-#+END_SRC
+#+end_src
 ** ghidorah
 #+BEGIN_SRC nix :tangle ~/.config/nixos/machines/ghidorah/ghidorah.nix
   
@@ -223,6 +232,35 @@
 
 #+end_src
 * Containers
+** homepage
+#+begin_src nix :tangle ~/.config/nixos/containers/homepage.nix
+
+    {lib, ...}: let
+    contName = "homepage";
+  in {
+
+    virtualisation.oci-containers.containers."${contName}" = {
+      hostname = "${contName}";
+      autoStart = true;
+      image = "ghcr.io/gethomepage/${toString contName}:latest";
+    
+      volumes = [
+        "/home/jacob/.config/homepage:/app/config"
+        "/run/user/1000/podman/podman.sock:/var/run/docker.sock"
+      ];
+
+      ports = [
+        "3000:3000"
+      ];
+              
+      environment = {
+        PUID = "1000";
+        PGID = "1000";
+      };
+    };
+  }
+    
+#+end_src
 ** radarr
 #+BEGIN_SRC nix :tangle ~/.config/nixos/containers/radarr.nix
 

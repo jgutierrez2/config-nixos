@@ -38,10 +38,6 @@
      auto_https off
    }
 
-   https://frigate.gooterez.me {
-     redir http://{host}{uri}
-   }
-
    http://frigate.gooterez.me {
      reverse_proxy 192.168.3.102:5000
    }
