@@ -48,8 +48,8 @@ in {
  #     "--ip=${secrets.ip.frigate}"
       "--privileged"
       "--shm-size=512m"
-#      "--device=/dev/bus/usb:/dev/bus/usb" # coral
-      "--device=/dev/dri/renderD128" # gpu
+      "--device=/dev/bus/usb:/dev/bus/usb" # coral
+      "--device=/dev/dri/renderD128:/dev/dri/renderD128" # gpu
       "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000" # tempfs
     ];
   };
