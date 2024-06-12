@@ -1,7 +1,6 @@
 #+OPTIONS: toc:2          (only include two levels in TOC)
 
-
-** Contents                                                       :toc:quote:
+* Contents                                                        :toc:quote:
 #+begin_quote
 - [[#machines][Machines]]
   - [[#biollante][biollante]]
@@ -63,7 +62,7 @@
     };
 
     environment.systemPackages = with pkgs; [
-
+      tmux
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
     ];
@@ -95,7 +94,7 @@
         writeable = true;
         port = 7681;
         terminalType = "xterm-direct";
-    #      entrypoint = [ "bash" ];
+        entrypoint = [ "${pkgs.tmux}/bin/tmux attach-session -t ttyd || ${pkgs.tmux}/bin/tmux/bin/tmux new-session ttyd" ];
         };
 
       syncthing = {
