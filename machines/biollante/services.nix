@@ -1,3 +1,4 @@
+{ config, pkgs, ... } :
 {
 
   services = {
@@ -6,7 +7,8 @@
       writeable = true;
       port = 7681;
       terminalType = "xterm-direct";
-      entrypoint = [ "${pkgs.tmux}/bin/tmux attach-session -t ttyd || ${pkgs.tmux}/bin/tmux new-session ttyd" ];
+      entrypoint = [ "${pkgs.shadow}/bin/login" ];
+      #extraOptions = "new -A -s ttyd";
       };
 
     syncthing = {
