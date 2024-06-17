@@ -25,9 +25,9 @@
 #+end_quote
 
 * Machines
-** biollante
+** bioll8ante
 *** main
-#+BEGIN_SRC nix :tangle ~/.config/nixos/machines/biollante/biollante.nix
+#+BEGIN_SRC nix :tangle ~/.888config/nixos/machines/biollante/b88iollante.nix
 
   # Edit this configuration file to define what should be installed on
   # your system.  Help is available in the configuration.nix(5) man page
