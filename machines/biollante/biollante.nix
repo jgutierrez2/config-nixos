@@ -49,5 +49,6 @@
 
   environment.interactiveShellInit = ''
     alias wn='emacsclient ~/notes/work-notes.org'
+    PS1="> "
   '';
 }
