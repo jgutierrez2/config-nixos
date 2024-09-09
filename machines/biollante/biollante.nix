@@ -21,6 +21,7 @@
       ../../containers/prowlarr.nix
       ../../containers/jellyfin.nix
       ../../containers/caddy.nix
+      ../../containers/cloudflared.nix
     ];
 
   networking.hostName = "biollante"; # Define your hostname.
