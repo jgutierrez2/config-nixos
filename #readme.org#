@@ -169,7 +169,7 @@
     networking.hostName = "ghidorah"; # Define your hostname.
 
     fileSystems."/external-media" = {
-      device = "/dev/disk/by-uuid/c2cfd22f-7dbb-49f4-9ac7-208e3f28e4ca";
+      device = "/dev/disk/by-uuid/6c713be8-7eea-4420-b944-f21cb3542218";
       fsType = "ext4";
     };
 
@@ -255,10 +255,8 @@
 
       kitty
       emacs
-      python3
 
       hyprland
-      hyprlock
       wofi
       tofi
       waybar
@@ -268,14 +266,10 @@
       cliphist
 
       brave
-
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
     ];
 
-    programs.hyprland.enable = true;
-    programs.hyprlock.enable = true;
-  
     fonts.packages = with pkgs; [
       font-awesome
       ];
@@ -714,7 +708,7 @@ in {
     virtualisation.oci-containers.containers.${contName} = {
       hostname = "${contName}";
       autoStart = true;
-      image = "ghcr.io/blakeblackshear/frigate:0.14.0-beta4";
+      image = "ghcr.io/blakeblackshear/frigate:0.14.0-beta3";
       ports = [
         "${toString rtmp}:${toString rtmp}"
         "${toString web}:${toString web}"
@@ -777,6 +771,46 @@ in {
 #+end_src
 ** zwavejs
 #+begin_src nix :tangle ~/.config/nixos/containers/zwavejs.nix
+
+    {
+    pkgs,
+    lib,
+    ...
+  }: let
+    contName = "zwavejs";
+    dir1 = "/etc/oci.cont/${contName}/store";
+  in {
+    system.activationScripts.makeFrigateDir = lib.stringAfter ["var"] ''
+      mkdir -v -p ${toString dir1}
+    '';
+
+    virtualisation.oci-containers.containers.${contName} = {
+      hostname = "${contName}";
+      autoStart = true;
+      image = "zwavejs/zwave-js-ui:latest";
+      ports = [
+        "8091:8091"
+        "3000:3000"
+      ];
+    
+      volumes = [
+        "${dir1}:/usr/src/app/store"
+      ];
+
+      extraOptions = [
+        "--device=/dev/serial/by-id/usb-Silicon_Labs_Zooz_ZST10_700_Z-Wave_Stick_d8b3184ecd60ec119a403f7625bfaa52-if00-port0:/dev/zwave" 
+      ];
+
+    };
+
+    
+
+  }
+
+#+end_src
+
+** cloudflared
+#+begin_src nix :tangle ~/.config/nixos/containers/cloudflared.nix
 
     {
     pkgs,
