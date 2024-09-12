@@ -8,6 +8,7 @@
 
   imports =
     [ ../../modules/shared.nix
+      ./packages.nix
       ./services.nix
     ];
 
