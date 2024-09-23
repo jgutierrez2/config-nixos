@@ -21,7 +21,6 @@
       ../../containers/prowlarr.nix
       ../../containers/jellyfin.nix
       ../../containers/caddy.nix
-      ../../containers/cloudflared.nix
     ];
 
   networking.hostName = "biollante"; # Define your hostname.
@@ -50,6 +49,6 @@
 
   environment.interactiveShellInit = ''
     alias wn='emacsclient ~/notes/work-notes.org'
-    PS1="> "
+    PS1="\n┌──(\u@\h)-[\[\w\]]\n└─> "
   '';
 }
