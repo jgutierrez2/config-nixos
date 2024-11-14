@@ -21,6 +21,7 @@
     kitty
     emacs
     python3
+    ghc
 
     hyprland
     hyprlock
