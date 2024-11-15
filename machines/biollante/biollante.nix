@@ -33,10 +33,12 @@
   };
 
   environment.systemPackages = with pkgs; [
-
+    dyalog
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
+
+  nixpkgs.config.dyalog.acceptLicense = true;
 
  services.xserver = {
   enable = true;

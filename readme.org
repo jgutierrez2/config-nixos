@@ -1,5 +1,5 @@
 #+OPTIONS: toc:2          (only include two levels in TOC)
-
+11;rgb:2b2b/2b2b/2b2b
 * Contents                                                        :toc:quote:
 #+begin_quote
 - [[#machines][Machines]]
@@ -64,10 +64,12 @@
     };
 
     environment.systemPackages = with pkgs; [
-
+      dyalog
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
     ];
+
+    nixpkgs.config.dyalog.acceptLicense = true;
 
    services.xserver = {
     enable = true;
