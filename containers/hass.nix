@@ -13,7 +13,7 @@ in {
   virtualisation.oci-containers.containers.${contName} = {
     hostname = "${contName}";
     autoStart = true;
-    image = "ghcr.io/home-assistant/home-assistant:2024.4";
+    image = "ghcr.io/home-assistant/home-assistant:2024.11";
     ports = [
       "8123:8123"
     ];

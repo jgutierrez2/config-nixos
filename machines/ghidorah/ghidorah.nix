@@ -22,6 +22,19 @@
     fsType = "ext4";
   };
 
+ environment.systemPackages = with pkgs; [
+     python-matter-server
+   ];
+
+ services.matter-server = {
+   enable = true;
+   port = 5580;
+   };
+
+ networking.firewall.allowedTCPPorts = [ 5580
+                                        ];
+
+
  hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [

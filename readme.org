@@ -157,7 +157,7 @@
 #+end_src
 ** ghidorah
 #+BEGIN_SRC nix :tangle ~/.config/nixos/machines/ghidorah/ghidorah.nix
-  
+
   # Edit this configuration file to define what should be installed on
   # your system.  Help is available in the configuration.nix(5) man page
   # and in the NixOS manual (accessible by running ‘nixos-help’).
@@ -169,9 +169,9 @@
     imports =
       [ ../../modules/shared.nix
 
-	../../containers/frigate.nix
-	../../containers/hass.nix
-	../../containers/zwavejs.nix
+        ../../containers/frigate.nix
+        ../../containers/hass.nix
+        ../../containers/zwavejs.nix
       ];
 
 
@@ -182,10 +182,23 @@
       fsType = "ext4";
     };
 
+   environment.systemPackages = with pkgs; [
+       python-matter-server
+     ];
+
+   services.matter-server = {
+     enable = true;
+     port = 5580;
+     };
+
+   networking.firewall.allowedTCPPorts = [ 5580
+                                          ];
+
+
    hardware.opengl = {
       enable = true;
       extraPackages = with pkgs; [
-	intel-media-driver # For Broadwell (2015) or newer processors. LIBVA_DRIVER_NAME=iHD
+        intel-media-driver # For Broadwell (2015) or newer processors. LIBVA_DRIVER_NAME=iHD
   #      intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
       ];
     };
@@ -813,7 +826,7 @@ in {
     virtualisation.oci-containers.containers.${contName} = {
       hostname = "${contName}";
       autoStart = true;
-      image = "ghcr.io/home-assistant/home-assistant:2024.4";
+      image = "ghcr.io/home-assistant/home-assistant:2024.11";
       ports = [
         "8123:8123"
       ];
