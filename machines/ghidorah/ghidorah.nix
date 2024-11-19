@@ -12,6 +12,7 @@
       ../../containers/frigate.nix
       ../../containers/hass.nix
       ../../containers/zwavejs.nix
+      ../../containers/matter-server.nix
     ];
 
 
@@ -23,15 +24,17 @@
   };
 
  environment.systemPackages = with pkgs; [
-     python-matter-server
+   #  python-matter-server
    ];
 
- services.matter-server = {
-   enable = true;
-   port = 5580;
-   };
+ # services.matter-server = {
+ #  enable = true;
+ #  port = 5580;
+ #  };
 
  networking.firewall.allowedTCPPorts = [ 5580
+                                        ];
+ networking.firewall.allowedUDPPorts = [ 5580
                                         ];
 
 

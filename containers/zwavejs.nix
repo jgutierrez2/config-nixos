@@ -13,7 +13,7 @@ in {
   virtualisation.oci-containers.containers.${contName} = {
     hostname = "${contName}";
     autoStart = true;
-    image = "zwavejs/zwave-js-ui:latest";
+    image = "zwavejs/zwave-js-ui:9.27.2";
     ports = [
       "8091:8091"
       "3000:3000"
