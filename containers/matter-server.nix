@@ -14,7 +14,8 @@ in {
     hostname = "${contName}";
     autoStart = true;
     image = "ghcr.io/home-assistant-libs/python-matter-server:6.6";
-    extraOptions = [ "--network=host" ];
+    extraOptions = [ "--net=host"
+                     "--privileged" ];
     volumes = [
       "${dir1}:/data/"
       "/var/run/dbus:/run/dbus:ro"
