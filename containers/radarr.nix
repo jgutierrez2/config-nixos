@@ -15,12 +15,13 @@ in {
       "/etc/localtime:/etc/localtime:ro"
       "${toString dir1}:/config"
       "/external-media/data:/data"
+      "/mnt/nas-media:/data/nas-media/"
     ];
 
     ports = [
       "7878:7878"
     ];
-              
+
     environment = {
       PUID = "1000";
       PGID = "1000";

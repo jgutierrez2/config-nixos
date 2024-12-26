@@ -1,27 +1,27 @@
 {
   config,
   pkgs,
-  lib,
+        lib,
   ...
-}: let
-  contName = "dyalog-web";
-in {
+      }: let
+        contName = "dyalog-web";
+      in {
 
-  virtualisation.oci-containers.containers.${contName} = {
-    hostname = "${contName}";
-    autoStart = true;
-    image = "dyalog/dyalog";
-    ports = [
-      "8888:8888"
-    ];
+        virtualisation.oci-containers.containers.${contName} = {
+          hostname = "${contName}";
+          autoStart = true;
+          image = "dyalog/dyalog";
+          ports = [
+            "8888:8888"
+          ];
 
-    volumes = [
-      "/external-media/data/dyalog:/files"
-    ];
+          volumes = [
+            "/external-media/data/dyalog:/files"
+          ];
 
 
-    environment = {
-      RIDE_INIT = "http:*:8888";
-    };
-  };
-}
+          environment = {
+            RIDE_INIT = "http:*:8888";
+          };
+        };
+      }

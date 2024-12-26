@@ -11,7 +11,7 @@
       ../../modules/shared.nix
       ./services.nix
 
-      ../../containers/homepage.nix
+   #   ../../containers/homepage.nix
       ../../containers/radarr.nix
       ../../containers/sonarr.nix
       ../../containers/readarr.nix
@@ -23,6 +23,7 @@
       ../../containers/caddy.nix
       ../../containers/dyalog-serve.nix
       ../../containers/dyalog-web.nix
+      ../../containers/ollama.nix
     ];
 
   networking.hostName = "biollante"; # Define your hostname.

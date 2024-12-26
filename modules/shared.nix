@@ -36,6 +36,8 @@
     brave
     kodi
 
+    cifs-utils
+
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
@@ -45,6 +47,26 @@
 
   fonts.packages = with pkgs; [
     font-awesome
+  ];
+
+  system.activationScripts = {
+    mnt = {
+      text = "mkdir -p /mnt/nas-media";
+      deps = [];
+    };
+  };
+
+  fileSystems."/mnt/nas-media" = {
+    device = "//192.168.3.196/Media";
+    fsType = "cifs";
+    options = [
+      "guest"             # No username/password required
+      "rw"                # Read/write
+      "file_mode=0777"
+      "dir_mode=0777"
+      "iocharset=utf8"    # Character set
+      "vers=3.0"          # Force SMB version 3.0 (sometimes optional)
     ];
+  };
 
 }
