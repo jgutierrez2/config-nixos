@@ -13,6 +13,8 @@
       ../../containers/hass.nix
       ../../containers/zwavejs.nix
       ../../containers/matter-server.nix
+      ../../containers/faster-whisper.nix
+      ../../containers/mosquitto.nix
     ];
 
 

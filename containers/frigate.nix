@@ -27,7 +27,7 @@ in {
   virtualisation.oci-containers.containers.${contName} = {
     hostname = "${contName}";
     autoStart = true;
-    image = "ghcr.io/blakeblackshear/frigate:0.14.1";
+    image = "ghcr.io/blakeblackshear/frigate:0.15.0-beta4";
     ports = [
       "${toString rtmp}:${toString rtmp}"
       "${toString web}:${toString web}"
