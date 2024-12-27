@@ -45,8 +45,8 @@
 
  services.xserver = {
   enable = true;
-  layout = "us";
-  xkbOptions = "apl";
+  xkb.layout = "us";
+  xkb.options = "apl";
 };
  hardware.opengl = {
     enable = true;

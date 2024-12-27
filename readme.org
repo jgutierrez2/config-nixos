@@ -176,11 +176,13 @@
         ../../containers/matter-server.nix
         ../../containers/faster-whisper.nix
         ../../containers/mosquitto.nix
+        ../../containers/openwakeword.nix
       ];
 
 
     networking.hostName = "ghidorah"; # Define your hostname.
-
+    networking.firewall.enable = false;
+    
     fileSystems."/external-media" = {
       device = "/dev/disk/by-uuid/c2cfd22f-7dbb-49f4-9ac7-208e3f28e4ca";
       fsType = "ext4";
@@ -195,10 +197,10 @@
    #  port = 5580;
    #  };
 
-   networking.firewall.allowedTCPPorts = [ 5580
-                                          ];
-   networking.firewall.allowedUDPPorts = [ 5580
-                                          ];
+   # networking.firewall.allowedTCPPorts = [ 5580
+   #                                       ];
+   # networking.firewall.allowedUDPPorts = [ 5580
+   #                                       ];
 
 
    hardware.opengl = {
@@ -865,6 +867,12 @@ in {
         "${dir1}:/config"
         "/var/run/dbus:/run/dbus:ro"
         "/etc/localtime:/etc/localtime:ro"
+        "home-assistant-dockerenv:/.dockerenv"
+
+      ];
+
+      extraOptions = [
+        "--net=host"
       ];
     };
   }
@@ -1067,6 +1075,13 @@ in {
       };
     };
 
+    # networking.firewall = {
+    #  enable = true;
+    #  allowedTCPPorts = [ 10300 ];  # Include both SSH and Whisper ports
+      # If you need UDP as well
+    #  allowedUDPPorts = [ 10300 ];
+    # };
+
     # Ensure necessary packages are available
     environment.systemPackages = with pkgs; [
       podman
@@ -1106,6 +1121,56 @@ in {
         PUID = "1000";
         PGID = "1000";
       };
+    };
+  }
+#+end_src
+** openwakeword
+#+begin_src nix :tangle ~/.config/nixos/containers/openwakeword.nix
+
+    { lib, config, pkgs, ... }:
+  let
+    contName = "openwakeword";
+    dir1 = "/etc/oci.cont/${contName}/config";
+  in {
+    system.activationScripts."make${contName}Dir" = lib.stringAfter ["var"] ''
+       mkdir -v -p ${toString dir1}
+     '';
+
+    virtualisation = {
+      oci-containers = {
+        containers.openwakeword = {
+          image = "rhasspy/wyoming-openwakeword:latest";
+          autoStart = true;
+          ports = [
+            "10400:10400" # Default port for OpenWakeWord
+          ];
+          volumes = [
+            "${toString dir1}:/config" # Mount volume for configuration data
+          ];
+          environment = {
+            PUID = "1000"; # User ID to run the container as
+            PGID = "1000"; # Group ID to run the container as
+            TZ = "America/Chicago"; # Your timezone
+            # OpenWakeWord specific settings
+            WAKE_WORDS = "hey_jarvis"; # Comma-separated list of wake words
+            THRESHOLD = "0.5"; # Detection threshold (0-1)
+            DEBUG = "1"; # Enable debug logging
+          };
+          extraOptions = [
+            "--log-level=debug"
+          ];
+        };
+      };
+    };
+
+    # Ensure necessary packages are available
+    environment.systemPackages = with pkgs; [
+      podman
+    ];
+
+    # Open firewall port
+    networking.firewall = {
+      allowedTCPPorts = [ 10400 ];
     };
   }
 #+end_src

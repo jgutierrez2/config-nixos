@@ -22,6 +22,12 @@ in {
       "${dir1}:/config"
       "/var/run/dbus:/run/dbus:ro"
       "/etc/localtime:/etc/localtime:ro"
+      "home-assistant-dockerenv:/.dockerenv"
+
+    ];
+
+    extraOptions = [
+      "--net=host"
     ];
   };
 }

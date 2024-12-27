@@ -31,6 +31,13 @@ in {
     };
   };
 
+  # networking.firewall = {
+  #  enable = true;
+  #  allowedTCPPorts = [ 10300 ];  # Include both SSH and Whisper ports
+    # If you need UDP as well
+  #  allowedUDPPorts = [ 10300 ];
+  # };
+
   # Ensure necessary packages are available
   environment.systemPackages = with pkgs; [
     podman
