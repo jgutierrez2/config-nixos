@@ -1,5 +1,4 @@
-0;276;0c#+OPTIONS: toc:2          (only include two levels in TOC)
-11;rgb:2b2b/2b2b/2b2b
+#+OPTIONS: toc:2          (only include two levels in TOC)
 * Contents                                                        :toc:quote:
 #+begin_quote
 - [[#machines][Machines]]
@@ -283,6 +282,105 @@
 #+end_src
 *** services
 #+begin_src nix :tangle ~/.config/nixos/machines/rodan/services.nix
+  {
+    services = {
+      syncthing = {
+        enable = true;
+        user = "jacob";
+        dataDir = "/home/jacob/Documents";
+        configDir = "/home/jacob/.config/syncthing";
+      };
+
+      pipewire = {
+        enable = true;
+        pulse.enable = true;
+      };
+    };
+  }
+    
+#+end_src
+
+** kumonga
+*** main
+#+begin_src nix :tangle ~/.config/nixos/machines/kumonga/kumonga.nix
+
+  # Edit this configuration file to define what should be installed on
+  # your system.  Help is available in the configuration.nix(5) man page
+  # and in the NixOS manual (accessible by running ‘nixos-help’).
+
+  { config, pkgs, lib, ... }:
+
+  {
+
+    imports =
+      [ ../../modules/shared.nix
+        ./packages.nix
+        ./services.nix
+      ];
+
+    networking.hostName = "kumonga"; # Define your hostname.
+  
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+    #allow chat ai to work
+    networking.firewall.allowedTCPPorts = [ 3000 5000 ];    
+  }  
+
+#+end_src
+
+*** packages
+#+begin_src nix :tangle ~/.config/nixos/machines/kumonga/packages.nix
+  
+  { config, pkgs, lib, ... }:
+  {
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    environment.systemPackages = with pkgs; [
+      git
+      gh
+      syncthing
+      cloudflare-warp
+
+      tree
+      guile_3_0
+
+      kitty
+      emacs
+      python3
+      stack
+      code-cursor
+
+      hyprland
+      hyprlock
+      xdg-desktop-portal
+      rofi-wayland
+      waybar
+      hyprpaper
+      wl-clipboard
+      wlroots
+      pipewire
+      xwayland
+      cliphist
+
+      brave
+      kodi
+
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
+    ];
+  
+    services.dbus.enable = true;
+
+    # services.elogind.enable = true;
+
+    programs.appimage.enable = true;
+    programs.appimage.binfmt = true;
+
+  }
+
+#+end_src
+*** services
+#+begin_src nix :tangle ~/.config/nixos/machines/kumonga/services.nix
   {
     services = {
       syncthing = {
