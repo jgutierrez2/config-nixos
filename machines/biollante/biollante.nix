@@ -90,11 +90,12 @@
       serviceConfig = {
         Type = "simple";
         User = "jacob";
-        ExecStart = "/home/jacob/.services/only-tasks/result/bin/start-app";
+        ExecStart = "/home/jacob/.services/only-tasks/result/bin/task-manager 4000";
         Restart = "always";
         RestartSec = "10";
-        Environment = "PORT=4000"; 
-      };
+        WorkingDirectory = "/home/jacob/.services/only-tasks";
+        Environment = "PORT=4000";
+ };
     };
   };
 
