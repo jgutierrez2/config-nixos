@@ -29,6 +29,7 @@ in {
     autoStart = true;
     image = "ghcr.io/blakeblackshear/frigate:0.15.0-beta4";
     ports = [
+      "1984:1984"
       "${toString rtmp}:${toString rtmp}"
       "${toString web}:${toString web}"
       "${toString rtsp}:${toString rtsp}"
