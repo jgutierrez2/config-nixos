@@ -62,4 +62,45 @@
     alias wn='emacsclient ~/notes/work-notes.org'
     PS1="\n┌──(\u@\h)-[\[\w\]]\n└─> "
   '';
+
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  systemd.services = {
+    only-ai = {
+      description = "Only AI Chat Application";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
+      serviceConfig = {
+        Type = "simple";
+        User = "jacob";
+        ExecStart = "/home/jacob/.services/only-ai/result/bin/start-app";
+        Restart = "always";
+        RestartSec = "10";
+      };
+    };
+
+
+    only-tasks = {
+      description = "Only Tasks Application";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
+      serviceConfig = {
+        Type = "simple";
+        User = "jacob";
+        ExecStart = "/home/jacob/.services/only-tasks/result/bin/start-app";
+        Restart = "always";
+        RestartSec = "10";
+        Environment = "PORT=4000"; 
+      };
+    };
+  };
+
+  #allow chat ai to work
+  networking.firewall.allowedTCPPorts = [ 3000 5000
+                                          4000];
+
+
 }

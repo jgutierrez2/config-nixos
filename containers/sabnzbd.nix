@@ -14,7 +14,7 @@ in {
     volumes = [
       "/etc/localtime:/etc/localtime:ro"
       "${toString dir1}:/config"
-      "/external-media/data/usenet:/data/usenet"
+      "/external-media/data/usenet:/data/usenet"       "/mnt/nas-media/downloads/usenet:/data/nas-media/downloads/usenet"
     ];
 
     ports = [

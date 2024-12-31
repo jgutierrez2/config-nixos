@@ -15,6 +15,7 @@ in {
       "/etc/localtime:/etc/localtime:ro"
       "${toString dir1}:/config"
       "/external-media/data/media:/data/media"
+      "/mnt/nas-media:/data/nas-media/"
     ];
 
     ports = [
