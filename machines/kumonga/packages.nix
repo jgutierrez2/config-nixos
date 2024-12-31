@@ -15,7 +15,6 @@
     emacs
     python3
     stack
-    code-cursor
 
     hyprland
     hyprlock
