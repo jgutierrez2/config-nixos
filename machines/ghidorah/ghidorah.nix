@@ -16,6 +16,7 @@
       ../../containers/faster-whisper.nix
       ../../containers/mosquitto.nix
       ../../containers/openwakeword.nix
+      ../../containers/piper.nix
     ];
 
 
