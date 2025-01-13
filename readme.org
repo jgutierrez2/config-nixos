@@ -507,16 +507,29 @@
       };
     };
 
+    fileSystems."/mnt/nas-shared" = {
+      device = "//192.168.3.196/Shared";
+      fsType = "cifs";
+      options = [
+        "guest"             # No username/password required
+        "noperm"
+        "uid=1000"
+        "gid=1000"
+        "file_mode=0777"
+        "dir_mode=0777"
+      ];
+    };
+
     fileSystems."/mnt/nas-media" = {
       device = "//192.168.3.196/Media";
       fsType = "cifs";
       options = [
         "guest"             # No username/password required
-        "rw"                # Read/write
+        "noperm"
+        "uid=1000"
+        "gid=1000"
         "file_mode=0777"
         "dir_mode=0777"
-        "iocharset=utf8"    # Character set
-        "vers=3.0"          # Force SMB version 3.0 (sometimes optional)
       ];
     };
 
