@@ -21,7 +21,7 @@ in {
     ports = [
       "7878:7878"
     ];
-
+            
     environment = {
       PUID = "1000";
       PGID = "1000";

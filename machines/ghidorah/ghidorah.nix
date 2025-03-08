@@ -22,7 +22,7 @@
 
   networking.hostName = "ghidorah"; # Define your hostname.
   networking.firewall.enable = false;
-
+  
   fileSystems."/external-media" = {
     device = "/dev/disk/by-uuid/c2cfd22f-7dbb-49f4-9ac7-208e3f28e4ca";
     fsType = "ext4";

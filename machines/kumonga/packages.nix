@@ -12,16 +12,29 @@
     guile_3_0
 
     kitty
-    emacs
     python3
     stack
 
     hyprland
+    hyprpaper
+    hypridle
     hyprlock
-    xdg-desktop-portal
+    xdg-desktop-portal-hyprland
+    # hyprsysteminfo
+    hyprsunset
+    hyprpolkitagent
+    # hyprland-qt-support
+
+    hyprcursor
+    hyprutils
+    hyprlang
+    hyprwayland-scanner
+    aquamarine
+    # hyprgraphics
+    # hyprland-qtutils
+
     rofi-wayland
     waybar
-    hyprpaper
     wl-clipboard
     wlroots
     pipewire

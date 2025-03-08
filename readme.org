@@ -366,7 +366,7 @@
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
     #allow chat ai to work
-    networking.firewall.allowedTCPPorts = [ 3000 5000 ];
+    networking.firewall.allowedTCPPorts = [ 3000 5000 8000 ];
 
     programs.appimage = {
       enable = true;
@@ -393,16 +393,29 @@
       guile_3_0
 
       kitty
-      emacs
       python3
       stack
 
       hyprland
+      hyprpaper
+      hypridle
       hyprlock
-      xdg-desktop-portal
+      xdg-desktop-portal-hyprland
+      # hyprsysteminfo
+      hyprsunset
+      hyprpolkitagent
+      # hyprland-qt-support
+
+      hyprcursor
+      hyprutils
+      hyprlang
+      hyprwayland-scanner
+      aquamarine
+      # hyprgraphics
+      # hyprland-qtutils
+  
       rofi-wayland
       waybar
-      hyprpaper
       wl-clipboard
       wlroots
       pipewire
@@ -470,7 +483,7 @@
       guile_3_0
 
       kitty
-      emacs
+      emacs30-pgtk
       python3
       ghc
 

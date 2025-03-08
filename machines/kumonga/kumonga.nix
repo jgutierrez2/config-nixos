@@ -17,7 +17,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   #allow chat ai to work
-  networking.firewall.allowedTCPPorts = [ 3000 5000 ];
+  networking.firewall.allowedTCPPorts = [ 3000 5000 8000 ];
 
   programs.appimage = {
     enable = true;

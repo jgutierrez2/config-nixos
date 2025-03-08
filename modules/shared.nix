@@ -19,7 +19,7 @@
     guile_3_0
 
     kitty
-    emacs
+    emacs30-pgtk
     python3
     ghc
 
